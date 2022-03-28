@@ -1,0 +1,21 @@
+spring.jpa.database=POSTGRESQL
+spring.jpa.show-sql=false
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost/demo
+spring.datasource.username=postgres
+spring.datasource.password=123
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+explication
+
+spring.jpa.database= database motor
+spring.jpa.show-sql= show consults in log
+spring.jpa.hibernate.ddl-auto=strategy of schem generation to the database, the most common is update, this one will show the update in the database
+spring.datasource.driver-class-name=the one that is indicated in the pom with its dependency
+spring.datasource.url=data source demo
+username and password is the motor of the data base
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= this line is mandatory to work with postgresql, look for documentation if it is required with sql
+
+it is required to verify that the data base exists, it can be simulated with pgadmin 

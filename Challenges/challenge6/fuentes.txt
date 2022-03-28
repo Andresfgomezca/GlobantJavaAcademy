@@ -1,0 +1,15 @@
+https://fmhelp.filemaker.com/help/18/fmp/en/index.html#page/FMP_Help/many-to-many-relationships.html
+
+https://www.arquitecturajava.com/jpa-generatedvalue-y-primary-keys/
+
+https://www.adictosaltrabajo.com/2020/04/02/hibernate-onetoone-onetomany-manytoone-y-manytomany/
+
+https://www.baeldung.com/jpa-many-to-many
+
+https://github.com/eugenp/tutorials/tree/master/persistence-modules/spring-jpa-2/src
+
+https://www.baeldung.com/hibernate-one-to-many
+
+https://github.com/eugenp/tutorials/tree/master/persistence-modules/hibernate-annotations
+
+https://stackoverflow.com/questions/61656299/spring-jpa-many-to-one-one-to-many-relationship-with-restcontroller

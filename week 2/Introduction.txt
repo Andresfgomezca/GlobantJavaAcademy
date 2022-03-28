@@ -1,0 +1,1 @@
+A design patter is a generic tool that solves generic problems, it is different than an algorithm, these tools assist to develope bigger projects

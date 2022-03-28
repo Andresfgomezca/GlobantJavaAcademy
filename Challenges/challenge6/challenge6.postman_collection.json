@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "77d49224-38cd-4e70-8e93-2edf93c21f14",
+		"name": "challenge6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "obtener entrenadores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/trainers/",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"trainers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buscar entrenador",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\":\"test\",\r\n    \"firstName\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/trainer/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"trainer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crear entrenador",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\":\"test\",\r\n    \"firstName\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/trainer/",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"trainer",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtener pokemons atrapados por entrenador",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pokemonId\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/trainer/1/pokemons-catched",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"trainer",
+						"1",
+						"pokemons-catched"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtener pokemons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/pokemons/",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"pokemons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buscar pokemon",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\":\"loquillo\",\r\n    \"firstName\":\"bryan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/pokemon/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"pokemon",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crear pokemon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\",\r\n    \"nickName\":\"test\",\r\n    \"type\":\"Ghost\",\r\n    \"gender\":\"M\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/pokemon/",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"pokemon",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "borrar pokemon",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\",\r\n    \"nickName\":\"test\",\r\n    \"type\":\"Ghost\",\r\n    \"gender\":\"M\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/pokemon/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"pokemon",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,49 @@
+Intent 
+	Separate the construction of a complex xobject from its representation so that the same construction process can create different representations.
+	parse a complex representation, create one of several targets
+
+Problem
+	An appplication needs to create the elements of a complex agregate. The specification for the aggregate exists on secondary storage and one of many representations needs to be built in primary storage.
+
+Discussion
+	Separate the algorithm for interpreting(i.e. reading and parsing a stored persistance mechanism (e.g. RTF files) from the algorithm for building and representing one of many target produts(e.g. ASCII,TeX, texxxt widget). The focus/distinction is on creating complex aggregates.
+	The "director" invokes "builder" services as it interprets the external format. the "builder" creates part of the complex object each time it is called and maintains all intermediate state. when the product is finished, the client retrieves the result from the "builder".
+	Affords  finer control over the construction process. Unlike creational patterns that construc products in one shot, the builder pattern constructs the product step by step under the control of the "director"
+
+Structure
+	The reader encapsulates the parsing of the common input. the builder hierarchy mkes possible the polymorphic creation of many peculiar representations or targets.
+
+reader class received an element an it will go converted to the converter class, the converter class will have the methods of the product and the concrete products will be able to receive the director's instruction from the converter class
+
+Example
+	The builder pattern separates the construction of a complex object from its representation so that  the same construction process can create different representations. This pattern is used bny fast food restaurants to construct children's meals. Children's meal typically consist of a main item, a side item, a dring, aand a toy(e.g. a hamburger, fries, coke, and a toy dinosaur). Note that there can be variation in the content of the children's meal, but the construction process is the same. whether a customer orders a hamburguer, cheeseburger or chicken, the process is the same. the employee at the counter directs the crew to assemble a main item, side item, and toy. These items are then placed in a bag. The drink is placed in a cup and remains outside of the bag. This same process is used at competing restaurants. 
+
+
+Customer -> Orders the kid's meal in a list to the cashier (director class)
+cashier ->  the cashier request item by item to the builder 
+builder -> will have a method to return the meal complete to the cx.
+
+Check list
+	1.Decide if a common input and many possible representations(or outputs) is the problem at hand.
+	2. Encapsulate the parsing of the common input in a reader class
+	3. Design a standard protocol for creating all possible output representations. Capture the steps of this protocol in a builder interface.
+	4. Define a builder derived class for each target representation.
+	5. The client creates a reader object and a builder object, and registers the latter with the former.
+	6. The client asks the reader to "consttruct".
+	7. The client ask the builder to return the result.
+
+Rules of thumb
+	Sometimes creational patter are complementary: builder can use one of the other patterns to implement which components get built. Abstract factory, Builder, and prototype can use singleton in their implementations.
+	Builder focuses on constructing a complexx object step by step. Abstract factory emphasizes a family of product objects (either simpole or complex). Builder returns the product as a final step, but as far as the abstract factory is concerned, the productr gets returned immediately. 
+	builder ofter builds a composite.
+	Often, Designs start out using factory method(less complicated, more customizable, subclasses proliferate) and evolve toward abstract factory, prototype or builder ( more flexible, more complex) as the designer discovers where more flexibility is needed.
+
+https://www.youtube.com/watch?v=M1VOvNaiJPc
+
+Builder always has 4 components
+class director
+class product*
+abstract builder*
+multiple concrete builders (no limit)*
+
+It always construc objects of 1 class(product)

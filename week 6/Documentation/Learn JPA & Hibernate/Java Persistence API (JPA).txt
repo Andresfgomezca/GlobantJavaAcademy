@@ -1,0 +1,107 @@
+https://www.oscarblancarteblog.com/tutoriales/java-persistence-api-jpa/
+
+Java Persistence API (JPA)
+
+	JPA es la propuesta estándar que ofrece Java para implementar un Framework Object Relational Mapping (ORM), que permite interactuar con la base de datos por medio de objetos, de esta forma, JPA es el encargado de convertir los objetos Java en instrucciones para el Manejador de Base de Datos (MDB).
+
+	Cuando empezamos a trabajamos con bases de datos en Java lo primero que nos enseñan es a utiliza el API de JDBC el cual nos permite realizar consultas directas a la base de datos a través de consultas SQL nativas. JDBC por mucho tiempo fue la única forma de interactuar con las bases de datos, pero representaba un gran problema y es que Java es un lenguaje orientado a objetos y se tenía que convertir los atributos de las clases en una consulta SQL como SELECT, INSERT, UPDATE, DELTE, etc. lo que ocasionaba un gran esfuerzo de trabajo y un provocaba muchos errores en tiempo de ejecución, debido principalmente a que las consultas SQL se tenían que generar frecuentemente al vuelo.
+
+	Puedes ver en este post la diferencia entre JPA y JDBC.
+
+Una de las cosas más importantes para comprender que es JPA es entender que JPA es una especificación y no un Framework como tal, ¿pero quiere decir esto exactamente?, pues bien, una especificación no es más que un documento en el cual se plasman las reglas que debe de cumplir cualquier proveedor que dese desarrollar una implementación de JPA, de tal forma que cualquier persona puede  tomar la especificación y desarrollar su propia implementación de JPA, ¿Esto quiere decir que pueden existir muchas implementaciones de JPA? la respuesta es sí, de echo en la actualidad existen varios proveedor como lo son los siguientes:
+
+Hibernate
+ObjectDB
+TopLink
+EclipseLink
+OpenJPA
+
+	Dentro de las implementaciones más utilizadas están Hibernate, EclipseLink & TopLink, las dos primeras son las más utilizadas en el mundo open source y TopLink es muy utilizada en desarrollos y productos relacionados con Oracle. Antes de preguntarnos cuál es la diferencia entre todas estas implementaciones tenemos que comprender que en teoría todas debería de ofrecer la misma funcionalidad y el mismo comportamiento, lo que nos permitiría migrar entre una implementación a otra sin afectar en nada nuestra aplicación. Desde luego esto es solo teoría, ya que en la actualidad no todas las implementaciones implementan al 100% la especificación de JPA, además en escenario muy concretos puede que se comporten ligeramente diferente, por lo que puede requerir realizar algunos ajustes antes de migrar correctamente de proveedor.
+
+	Tambíen los quiero invitar a ver mi curso de JPA, donde explico todos estos temas aplicados con API REST, https://codmind.com/courses/jpa
+
+	Los invito a mi Curso de Mastering JPA, donde habla de todos estos temas y crearemos un API REST para probar todos los conceptos de persistencia.
+
+	Esta guía de JPA está dividida en una serie de artículos que nos permita separar tema para poderlo explicar mejor y de una forma más clara, recuerda que puedes inscribirte a mi blog para ser notificado cada vez que avancemos en esta guía. La guía tendrá la siguiente estructura:
+
+JPA Índice
+
+Introducción:
+	
+	En esta sección tocaremos los elementos más básicos de JPA, aprenderemos a crear un proyecto, configurarlo, aprenderemos las anotaciones básicas y crearemos nuestras primera Entidad.
+
+Crear un proyecto JPA
+
+	EntityManager y el archivo persistence.xml
+Declarar entidades con @Entity
+Mapeo de tablas con @Table
+Definir llave primaría con @Id
+Llaves compuestas con @IdClass
+JPA y los métodos hashCode & equals
+Embeber llave primaria con @EmbeddedId
+Definición de columnas con @Column
+Mapeo de enumeraciones con @Enumerated
+Mapeo de fechas con @Temporal
+Estrategias de carga con @Basic
+Trabajar con objetos pesados @Lob
+Atributos volátiles con @Transient
+
+EntityManager:
+
+	En este apartado tocaremos a profundidad el corazón de JPA. El EntityManager es uno de los objetos más relevantes de toda el API, pues es quien administra el ciclo de vida de todas las entidades.
+
+Cardinalidad y relaciones:
+
+	Hablaremos las diferentes cardinalidades soportadas por JPA, aprenderemos como es que una entidad puede relacionarse con otra y como es que son afectadas las entidades al estar relacionadas.
+
+Relación muchos a uno con @ManyToOne
+Anotación @JoinColumn
+Relación @OneToOne
+Relación uno a muchos con @OneToMany
+Relación muchos a muchos con @ManyToMany
+Relaciones direccionales y bidirecionales con @JoinTable
+Estrategias de carga (Lazy & Eager)
+Objetos embebidos con @Embeddable & @Embedded
+Sobrescribir atributos con @AttributeOverride
+
+Trabajando con colecciones:
+
+	Más allá del tipo de cardinalidad que definamos para relacionar nuestras entidades, las colecciones nos ayudan a controlar la forma en que los objetos son persistidos, consultados y ordenados.
+
+Colecciones con @ElementCollection
+Anotación @CollectionTable
+Collection & Set
+Ordenamiento de colecciones con @OrderBy
+Ordenamiento persistente con @OrderColumn
+Colecciones de tipo Map
+
+Querys:
+	En esta sección aprenderemos a utilizar JPQL o Java Persistence Query Lenguaje, el cual es un lenguaje basado en SQL pero que está diseñado para realizar consultas sobre Objetos. Aprenderemos a crear consultas al vuelo, ejecutar consultas preparadas y ejecutar procedimientos almacenados de la base de datos.
+
+Introducción a las clases Query & TypedQuery
+Introducción a JPQL
+Subquerys
+Query dinámicos & Querys preparados (Named Querys)
+Query hints
+Update & Delete Querys
+
+Criteria API:
+
+	A partir de la versión 2.0 de JPA se integra el API de criteria, el cual proporciona un mecanismo de consultas más avanzado, permitiendo realizar consultas sin la necesidad de escribir JPQA, en su lugar su utiliza una serie de método que van generando la consulta.
+
+Introducción al API Criteria
+Query Root
+Path Expressions
+Selecting Expressions
+Inner and Outer joins
+Fetch Joins
+Predicados
+
+Tópicos avanzados:
+
+	En esta sección se habla de diversas partes del API que están consideradas como avanzadas, ya sea por su complejidad o porque son desconocidos generalmente.
+
+Trabajando con Callbacks
+Manejo de eventos con EntityListeners
+Validación de Entidades (Validation)
+Bloqueos (Optimistic Locking & Pessimistic Locking)

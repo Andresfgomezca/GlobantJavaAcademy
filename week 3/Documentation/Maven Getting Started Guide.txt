@@ -1,0 +1,31 @@
+Maven Getting Started Guide
+
+	This guide is intended as a reference for those working with maaven for the first time, but is also intended to serve as a cookbook with self-contained references and solutions for common use cases. for first time users, it is recommended that you step through the material in a sequential fashion. for users more familiar with maven, this guide endeavours to provide a quick solution for the need at hand. it is assumed at this point that you have downloaded maven and installed maven on your local machine. 
+
+	Ok, so you now have maven installed and we're ready to go. Before we jump into our example we'll verify briefly go over what maven is and how it can help you with your deaily work and collaborative efforts with team members. maven will, of course, work for small projects, but maven shines in helping teams operate more effectively by allowing team members to focus on what the stakeholders of a project require. you can leave the build infrastructure of maven.
+
+What is maven?
+
+	At first glance maven can appear to be many things, but in a nutshell maven, is an attempt to apply patterns to a project's build infrastructure in order to promote comprehension and productivity by providing a clear path in the use of best practices. Maven is essentially a project management and comprehension tool and as such provides a way to help with managing:
+	-builds, documentation, reporting, dependencies, SCMs, releases and distribution.
+
+	If you want more background information on maven, you can check out the philosophy of maven and the history of maven.
+
+https://maven.apache.org/background/philosophy-of-maven.html - https://maven.apache.org/background/history-of-maven.html
+
+	Now let's move on to how you, the user, can benefit from using maven.
+
+How can Maven benefit my development process?
+
+	Maven can provide benefits for your build process by employing standard conventions and practices to accelerate your development cycle while at the same time helping you achieve a higher rate of success.
+
+	Now that we have covered a little bit of the history and purpose of maven let's get into some real examples to get you up and running with maven.
+
+How do I setup Maven?
+
+	The defaults for maaven are often sufficient, but if you need to change the cache location or are behind a HTTP proxy,  you will need to create configuration. See the guide to configuring maven for more information.
+
+https://maven.apache.org/guides/mini/guide-configuring-maven.html
+
+
+

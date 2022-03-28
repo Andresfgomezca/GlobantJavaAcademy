@@ -1,0 +1,21 @@
+https://www.youtube.com/watch?v=g2b-NbR48Jo&t=25s
+
+easy to work
+reasons: 
+	-easy to learn
+	-provides flexibility
+	-separation of concern
+
+we can create amazing and functional websites implementing MVC
+
+architecture:
+Controllers: -Login,Logout, Add, Multiplication (examples)
+from the client side, they send the request and our web.xml will select the controller for this request but if there are multiple controllers it will be dificult to organize, in MVC we implement a front controller that will control the required Controller, is called dispatched servlet, this one will receive all the requests.
+
+Once the request is in the dispatchedServlet, he will need a configuration file to understand which controller will receive the request, (the controllers have their controller anotation and their mapping methods) this configuration file needs to know whats the package that has the controller to select the desired controller(telusko-servlet.xml example)  the controller will return to the DispatcherServlet a "page"(the name of the page, model, etc) the dispatchetServlet needs to know whats the page that he needs and the data required. 
+
+Once the dispatcherServlet has this information, they will call this page with the information to response this to the customer. it can use different view technologies by changing the configuration of the dispatcherServlet, that is one benefit of using MVC for developing web apps.
+
+There are a lot of features that MVC has to work with this requests. more information in the example below.
+
+SpringMVCWithExample(helloworld)

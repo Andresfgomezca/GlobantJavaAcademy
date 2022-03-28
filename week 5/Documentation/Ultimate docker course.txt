@@ -1,0 +1,272 @@
+Ultimate docker course
+https://www.youtube.com/watch?v=pTFZFxd4hOI
+
+codewithmosh.com
+
+basic familiarity with git is required
+
+how to take this course:
+
+	Active by watching this course, at least taking some notes.
+
+in this section:
+what is docker?
+
+	a platform for building, running and shipping applications in a consistant manner, it will be able to run in multiple machines. the application can not run in all machines without docker for these reasons:
+	one or more files missing
+	software version mismatch
+	different configuration settings
+
+	with docker we can easily package our application with everything it needs and run it every where.(softwares, os, etc)
+
+	the person just need to request docker to bring up the application
+
+$ docker -compose up
+
+	it will be download and running in an isolated environment called container	
+
+container allows multiple applications to use different configurations for each application without missing with each others.
+
+	we can move all the configuration of a project that we will not use anymore in 1 move.
+	
+	$docker -compose down --rmi all
+
+	docker help us consistently build, run and ship applications. 
+
+
+VM vs containers
+
+	a virtual machine is an abstraction of a machine (physical hardware), using an hypervisor that creates and controls virtual machines.
+examples:
+	VirtualBox
+	VMware
+
+we can run an application in isolation inside of a virtual machine in the same machine.
+
+problems:
+	each VM needs a full blown OS.
+	slow to start due to the OS
+	resource intensive, this VM uses a big part of the hardward (cpu, ram, etc)
+
+	containers:
+	Allow running multiple apps in Isolation but they are lightweight, the can use the OS of the host. it start quickly and need less hardware resources.
+
+
+architecture of docker
+
+	docker uses a client server architecture, so, the client will contact the server using a REST API, the server also called the docker engine sets in the background and takes care of building and running docker containers
+
+	Containers will be like a process in the compurer, the containers does not have a full OS, they will be hosted with the OS of the host, the containers will share the kernel of the host, it is the core of an OS, is the part that manages applications and hardware resources like memory and cpu, windows can run windows and linux containers.
+
+installing docker 
+
+now we are going to install the lastest version of docker, docker version 20.10.5, we need to look for the get docker in google.
+we will add the windows docker we just need to verify that we have enough requirements to install de app.
+once we install the docker engine, we'll need to wait until the dockers is running in the pc. once everything is running we'll be able to run in a terminal docker version to verify the installation of docker, we need to verify that the docker engine is running.
+
+development workflow
+
+to start off we take an application, and we will dockerized we need to add a dockerfile to the project, it is a plain text file that includes the instructions that docker uses to package all this application into an image, this image contains everything our application needs to run.
+
+the image will contain: 
+	-A cut-down OS, a runtime environment(eg Node), application files, third-party libraries, environment variables. once we have the image, we tell docker to start a container using that image. the container will work as a process 	but it is a special kind of process because it has its own file system provided by the image. this is how we run it localy in our development machine.
+
+$docker run...
+
+Once we have the image, we can push it to the docker registry, it will be like github to git, it will storages the images and anyone will be able to use it. once the application image is on dockerhub we'll be able to pull it in any machine that uses docker	
+	
+all the instructions required for the application will be written in the docker file, with that we can package our application into an image and run it virtually anywhere.
+
+DOCKER IN ACTION
+
+we can create a new directory with the command
+
+mkdir "name" **the directory will be created in the current directory where I am located
+
+then we can go to the directory using the command
+
+cd "name"
+
+then josh opened this directory with the ide that he is using visual studio code
+
+code .
+
+in this directory he add a file called app.js	
+
+he is writing a code in js 
+
+console.log("hello docker!");
+
+to ship the application in a different computer it needs to have installed node and run the app
+
+noe app.js
+
+Instructions
+
+-Start with an OS
+-Install Node
+-copy app files
+-run node app.js
+
+to do it in a different way he adds a file to the application called Dockerfile **he installs the extensions needed for docker 
+
+he write the instructions, the file starts from a base image, he will add the files to this image
+the images are published in dockerhub.
+
+there are multiple node images, all of them has different distributions of linux
+
+FROM (linux or node):(tag to especify the linux distribution)alpine
+
+COPY .(all the files) /app(into the app directory) into this image
+
+WORKDIR /app **this command specifies the workdir to do not specify the path in other commands
+CMD node /app/app.js  **in this command it is specified, CMD run commands 
+
+now we can go to the terminal in the directory of our project to package our application
+
+docker build -t(tag to identify) "name" .(this point specifies that we are in the path were the project is)
+
+the image created will not appear in the directory, to see the images we tap the next docker command
+
+docker image ls
+
+now that the image is created we can run the image using the docker command
+
+docker run "name of the image" **it is not required to do it in the directory of the image
+
+the image can now be publish in duckerhub, now he open a play with docker link in google, he will run a docker machine in the browser
+
+he runs docker version to verify the version
+
+he will now copy the image from the repository to use it in the lab
+
+docker pull codewithmosh/"name of the image"
+
+then docker will download the image and he will be able to use is
+
+he uses docker image ls to verify that the image is now downloaded, then he was able to use the docker run command to run the image
+
+clean daemon 
+
+docker rmi "tag name"
+
+docker push andgoca96/docker101tutorial
+
+docker run -it bhenao/python-3.7 bash **run the bash of the desired repository
+
+docker tag "base" "new tag" **change tag 
+
+Section 2
+Linux command line
+
+It is required to know linux basics because docker is built on basic linux concepts.
+
+most docker tutorials are based on linux commands 
+
+Linux distributions
+
+Is open source software, many individuals  creates their own versions of linux called linux distributions, each of this distributions is made to solve special needs like running servers, desktop computers, etc.
+
+DISTROS
+-ubuntu
+-debian
+-alpine
+-fedora
+-centOS
+
+almost all of the supports all of these commands or they will have differences, the tutorial is done in ubuntu
+
+running linux
+
+he looks for the ubuntu official image, he can pull it with docker using the command
+
+docker pull ubuntu
+
+docker run ubuntu, if the image is locally, docker will start the container with this image but if it is not, docker will pull the image and then start the container
+
+docker ps will show the runnning processes that we have running in the contianers
+
+docker ps -a will shows the previous ones that we used 
+
+how the container was stoped because he didn't interact with it, he runs a command to interact with it.
+
+docker run -it(short for interactive) ubuntu image that we have locally, now the terminal will show the shell, this is a program that takes the commands and passes them to the OS for execution 
+
+root represents the user
+then the numbers after @ will be the name of the machine
+and then we will be able to see the / that represents where we are in the file systems 
+
+commands used to test
+echo hello **prints hello in the terminal
+whoami **prints our user name
+
+commands will be passed to the kernel for execution 
+
+echo $0 will show the location of this shell program
+
+ cat /etc/issue
+
+cat /etc/os-release **shows ubuntu version
+
+
+bin is a folder or directory and bash is a program called bourne again shell
+
+in linux we use / to separate files and directories and we use \ in windows terminals 
+
+linux is a key sensitive OS Echo in uppercase will not be found in the commands 
+
+up and down arrows run throw the previous commands
+
+history command will show it
+
+!2 will run the command in the history
+
+Managing packages
+
+most of the OS and development platforms has a package managers 
+
+Command to adjust code ctrl++alt+l
+
+the one for ubuntu is called apt (advance package tools)
+/apt
+
+it will show soft commands 
+apt-get will show in online tutorials
+
+now in the example he wants to run a package called nano 
+but it is not installed so he needs to call the command to installed
+
+apt install nano 
+
+he needs to locate this package with the command
+because it is not in the bash 
+
+so he updates the apt to find more packages 
+
+apt update
+
+it will now allow him to install nano from the updated list
+
+he can verify that the nanopackage is installed
+
+running nano
+ctrl + l clean the terminal
+and then he can remove the package with the apt remove nano
+
+the exercise proposed by mosh is to install python in this image
+
+apt install python
+
+exit - ends ubuntu bash
+
+dpkg -l list of packages installed
+
+dpkg -l | grep "python"
+grep filters the list of dpkg -l to find python
+
+package sl corrects me if I type sl by mistake 
+
+ls - lists dirs
+export PATH=$PATH:/usr/games
+we added the path of usr/games to the PATH, where the commands will look for the package ls
+

@@ -1,0 +1,14 @@
+Introduction to docker
+https://www.freecodecamp.org/news/docker-simplified-96639a35ff36/
+
+docker101 video
+https://www.youtube.com/watch?v=iqqDU2crIEQ&t=30s
+
+working with containers and images
+https://phoenixnap.com/kb/docker-image-vs-container
+
+helloword with docker
+https://examples.javacodegeeks.com/devops/docker/docker-hello-world-example/
+
+run sql server with docker
+https://www.youtube.com/watch?v=TUWItrX7hmA

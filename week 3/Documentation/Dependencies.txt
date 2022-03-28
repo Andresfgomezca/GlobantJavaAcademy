@@ -1,0 +1,147 @@
+Inyeccion de dependencias
+Spring framework
+https://www.youtube.com/watch?v=r4kqcSs4F7I
+tutorial introductorio
+expert one-on-one j2ee design and develpment, libro desarrollado por el fundador de spring Rod Johnson.
+
+este framework se enfoca para ala plataforma java enterprise edition
+
+Que es?
+	es un marco de trabajo, tecnicas aprobadas y testeadas.
+
+	posee un contenedor de inversion de control (IOC) usando java reflexion. es la propiedad que tienen los programas para manejar las clases en tiempo de ejecucion. permite manejar la estructura con el programa en ejecucion. 
+
+	tambien se le conoce por utilizar el patorn de desarrollo de software como inyeccion de dependencias
+
+	Objectos gestionados por spring container se les conoce como beans.
+
+Principio de inversion de dependencia(DIP)
+
+	Los modulos de alto nivel no deben depender de los modulos de bajo nivel.
+
+	Hay que hacer referencia en laas abstracciones sobre las implementaciones, el software debe estar desacoplado, no debe depender de una implementacion o una clase en particular.
+
+	Esto ayudara a crear codigo desacoplado
+
+	El patron IoC (inversion of control) es una aplicacion de este principio
+
+Inversion de control(IOC)
+
+	Este principio es una implementacion del principio de DIP, es conocido como el principio de hollywood.
+
+	Este utiliza un service colector que es tambien un patron de diseño y que su fin es desacoplar el codigo, utiliza eventos, delegaciones o inyecciones de dependencias, estas ultimas estan conformadas por un constructor de inyeccion, unas propiedades de inyeccion y un metodo de inyeccion.
+
+Inyeccion de dependencias(DI)
+	
+	Es un patron de diseño de software, es un subtipo de IoC y el objetivo es tener un codigo facil de mantener o desacoplado.
+
+	Este provee a los objetos lo que el objeto necesita, si necesita de determinadas dependencias o otros objetos, hay 3 estilos para hacer inyeccion de dependencias:
+	-Constructor
+	-Propiedad(set)
+	-Servicio/Interfaz
+
+Ejemplo:
+//Dependencies are injected and not created
+public class Customer{
+public Logger Log;//inyeccion de dependencias para el objeto logger en el constructor del Customer.
+public Customer(Logger obj){
+	Log=obj;
+	}
+}
+
+Spring Core Container
+
+	Es un IoC container, es opcional y permite gestionar el ciclo de vida de los objetos (beans)
+	-Crearlos, enlazarlos, configurarlos y destruirlos
+
+our POJOS( normal classes with gets and sets) son enviados al container para gestionar el ciclo de vida y durante la aplicacion utilizar el container en su momento correspondiente.
+
+Otros IoC containers.
+Java:
+	-PicoContainer, NanoContainer, Peapod, Gravity y Google Guice.
+
+Modulos
+
+	Es importante conocer los terminos antes de empezar a programar para no confundirse en inversion de control e inyeccion de dependencias.
+
+Acceso a datos:
+	-JDBC, ORM, OXM, JMS y transactions
+Web:
+	-WebSocket, Servlet, Web, Portlet
+AOP: ORIENDATO A ASPECTOS
+
+Core Container:
+	-Beans, core, context, SpEL
+Test.
+
+Ventajas
+
+	Flexibilidad(Integracion con otras herramientas)
+	Codigo Ordenado, permite programar ordenadamente
+	Uso de anotaciones
+	Inyeccion de dependencias
+	Estandares de programacion, son importantes al momento de hacer proyectos grandes para mantener codigos a lo largo del tiempo.
+
+Mitos
+	XML, alto requerimiento de configuracion, no es requerido - mito falso
+
+	Container no es ligero, Esto ya no es cierto porque en las versiones 3 o posteriores, se tienen multiples jar de manera independiente para no importar todas las librerias en un solo archivo.
+
+Requisitos
+	-Core Java SE
+	-Solida base en POO
+	-Maven (pom.xml) -> gestion de dependencias y librerias
+	-Patrones de diseño
+
+Contenido del curso.
+	
+	-Instalacion y configuracion del entorno de trabajo (STS)
+	-Codigo desacoplado, Inyeccion de dependencias luego de instalar el ide. Ioc e inyeccion
+	-Desarrollo de los conceptos basicos de Spring Core Container (Beans, Core, Context, SpEL)
+	-Ejemplo Aplicativo.
+
+
+https://www.youtube.com/watch?v=MWtrUxvdJlw
+
+Inyeccion de dependencias es un subtipo de la inversion de control.
+
+ejemplo
+
+messi-club barcelona
+
+messi depende de un club
+SIN DEPENDENCIAS
+public class messi {
+	Barcelona bar = new Barcelona();
+
+	public void mostrarEquipo() {
+		bar.mostrar();
+	}
+}
+
+public class Barcelona {
+	public void mostrar() {
+		sout("BARCELONA FC")
+	}
+}
+CON DEPENDENCIAS
+public class Messi {
+	private Barcelona barcelona;
+	//Inyeccion por constructor
+	public Messi(Barcelona bar) {
+		this.barcelona = bar;
+	}
+	//inyeccion por set
+	public void setBarcelona(Barcelona barcelona){
+		this.barcelona = barcelona;
+	}
+}
+
+	Messi m = new Messi(new Barcelona()):
+	//m.setEquipo(New Barcelona()):
+
+Se utiliza una interfaz para darle dinamismo (podriaa utilizarse un patron de diseño builder en el equpo para cambiar los equipos)
+Si messi dependiera de mas objetos como equipamiento, etc. se requeriria un gestor de estas funcionalidades para optimizar el codigo. 
+
+quien gestiona esto?
+Spring container, sera el encargado de gestionar todas las dependencias de este objeto en particular. 

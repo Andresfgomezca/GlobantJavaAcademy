@@ -1,0 +1,8 @@
+https://medium.com/javarevisited/best-practice-of-using-functionalinterface-annotation-b302f9b40594
+
+
+https://www.geeksforgeeks.org/functional-interfaces-java/#:~:text=Runnable%2C%20ActionListener%2C%20Comparable%20are%20some,as%20Single%20Abstract%20Method%20Interfaces
+
+https://www.baeldung.com/java-8-functional-interfaces
+
+https://www.geeksforgeeks.org/functional-interfaces-java/

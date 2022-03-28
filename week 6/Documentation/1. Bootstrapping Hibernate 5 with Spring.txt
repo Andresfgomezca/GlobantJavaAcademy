@@ -1,0 +1,186 @@
+Bootstrapping Hibernate 5 with Spring
+https://www.baeldung.com/hibernate-5-spring
+
+1. Overview
+
+	In this article, we'll discuss how to bootstrap Hibernate 5 with Spring, using both Java and XML configuration.
+
+	This article focuses on Spring MVC. Our article Spring Boot with Hibernate describes how to use Hibernate in Spring Boot.
+https://www.baeldung.com/spring-boot-hibernate
+
+2. Spring Integration
+
+	Bootstrapping a SessionFactory with the native Hibernate API is a bit complicated and would take us quite a few lines of code (have a look at the official documentation in case you really need to do that).
+http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#bootstrap-native
+
+	Fortunately, Spring supports bootstrapping the SessionFactory – so that we only need a few lines of Java code or XML configuration.
+
+3. Maven Dependencies
+
+	Let's get started by first adding the necessary dependencies to our pom.xml:
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.4.2.Final</version>
+</dependency>
+
+	The spring-orm module provides the Spring integration with Hibernate:
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-orm</artifactId>
+    <version>5.1.6.RELEASE</version>
+</dependency>
+
+	For the sake of simplicity, we’ll use H2 as our database:
+
+<dependency>
+    <groupId>com.h2database</groupId> 
+    <artifactId>h2</artifactId>
+    <version>1.4.197</version>
+</dependency>
+
+	Finally, we are going to use Tomcat JDBC Connection Pooling, which fits better for production purposes than the DriverManagerDataSource provided by Spring:
+
+<dependency>
+    <groupId>org.apache.tomcat</groupId>
+    <artifactId>tomcat-dbcp</artifactId>
+    <version>9.0.1</version>
+</dependency>
+
+4. Configuration
+
+	As mentioned before, Spring supports us with bootstrapping the Hibernate SessionFactory.
+
+	All we have to do is to define some beans as well as a few parameters.
+
+	With Spring, we have two options for these configurations, a Java-based and an XML-based way.
+
+4.1. Using Java Configuration
+
+	For using Hibernate 5 with Spring, little has changed since Hibernate 4: we have to use LocalSessionFactoryBean from the package org.springframework.orm.hibernate5 instead of org.springframework.orm.hibernate4.
+
+	Like with Hibernate 4 before, we have to define beans for LocalSessionFactoryBean, DataSource, and PlatformTransactionManager, as well as some Hibernate-specific properties.
+
+Let's create our HibernateConfig class to configure Hibernate 5 with Spring:
+
+@Configuration
+@EnableTransactionManagement
+public class HibernateConf {
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan(
+          {"com.baeldung.hibernate.bootstrap.model" });
+        sessionFactory.setHibernateProperties(hibernateProperties());
+
+        return sessionFactory;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("sa");
+
+        return dataSource;
+    }
+
+    @Bean
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager
+          = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
+
+    private final Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(
+          "hibernate.hbm2ddl.auto", "create-drop");
+        hibernateProperties.setProperty(
+          "hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+
+        return hibernateProperties;
+    }
+}
+
+4.2. Using XML Configuration
+As a secondary option, we can also configure Hibernate 5 with an XML-based configuration:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="...">
+
+    <bean id="sessionFactory" 
+      class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" 
+          ref="dataSource"/>
+        <property name="packagesToScan" 
+          value="com.baeldung.hibernate.bootstrap.model"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">
+                    create-drop
+                </prop>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.H2Dialect
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource" 
+      class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:db;DB_CLOSE_DELAY=-1"/>
+        <property name="username" value="sa"/>
+        <property name="password" value="sa"/>
+    </bean>
+
+    <bean id="txManager" 
+      class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+</beans>
+
+	As we can easily see, we're defining exactly the same beans and parameters as in the Java-based configuration earlier.
+
+	To bootstrap the XML into the Spring context, we can use a simple Java configuration file if the application is configured with Java configuration:
+
+@Configuration
+@EnableTransactionManagement
+@ImportResource({"classpath:hibernate5Configuration.xml"})
+public class HibernateXMLConf {
+    //
+}
+
+	Alternatively, we can simply provide the XML file to the Spring Context, if the overall configuration is purely XML.
+
+5. Usage
+
+	At this point, Hibernate 5 is fully configured with Spring, and we can inject the raw Hibernate SessionFactory directly whenever we need to:
+
+public abstract class BarHibernateDAO {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    // ...
+}
+
+6. Supported Databases
+
+	Unfortunately, the Hibernate project doesn't exactly provide an official list of supported databases.
+
+	That being said, it's easy to see if a particular database type might be supported, we can have a look at the list of supported dialects.
+http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#database-dialect
+
+7. Conclusion
+	In this quick tutorial, we configured Spring with Hibernate 5 – with both Java and XML configuration.
+
+	As always, the full source code of the examples is available over on GitHub.

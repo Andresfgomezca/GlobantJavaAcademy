@@ -1,0 +1,187 @@
+Simplify the DAO with Spring and Java Generics
+https://www.baeldung.com/simplifying-the-data-access-layer-with-spring-and-java-generics
+
+1. Overview
+
+	This article will focus on simplifying the DAO layer by using a single, generified Data Access Object for all entities in the system, which will result in elegant data access, with no unnecessary clutter or verbosity.
+
+	We'll build on the Abstract DAO class we saw in our previous article on Spring and Hibernate, and add generics support.
+https://www.baeldung.com/persistence-layer-with-spring-and-hibernate
+
+2. The Hibernate and JPA DAOs
+
+	Most production codebases have some kind of DAO layer. Usually, the implementation ranges from multiple classes with no abstract base class to some kind of generified class. However, one thing is consistent – there is always more than one. Most likely, there is a one to one relation between the DAOs and the entities in the system.
+
+	Also, depending on the level of generics involved, the actual implementations can vary from heavily duplicated code to almost empty, with the bulk of the logic grouped in a base abstract class.
+
+	These multiple implementations can usually be replaced by a single parametrized DAO. We can implement this such that no functionality is lost by taking full advantage of the type safety provided by Java Generics.
+
+	We'll show two implementations of this concept next, one for a Hibernate centric persistence layer and the other focusing on JPA. These implementations are by no means complete, but we can easily add more additional data access methods are included.
+
+public abstract class AbstractHibernateDao<T extends Serializable> {
+    private Class<T> clazz;
+
+    @Autowired
+    protected SessionFactory sessionFactory;
+
+    public void setClazz(final Class<T> clazzToSet) {
+        clazz = Preconditions.checkNotNull(clazzToSet);
+    }
+
+    public T findOne(final long id) {
+        return (T) getCurrentSession().get(clazz, id);
+    }
+
+    public List<T> findAll() {
+        return getCurrentSession().createQuery("from " + clazz.getName()).list();
+    }
+
+    public T create(final T entity) {
+        Preconditions.checkNotNull(entity);
+        getCurrentSession().saveOrUpdate(entity);
+        return entity;
+    }
+
+    public T update(final T entity) {
+        Preconditions.checkNotNull(entity);
+        return (T) getCurrentSession().merge(entity);
+    }
+
+    public void delete(final T entity) {
+        Preconditions.checkNotNull(entity);
+        getCurrentSession().delete(entity);
+    }
+
+    public void deleteById(final long entityId) {
+        final T entity = findOne(entityId);
+        Preconditions.checkState(entity != null);
+        delete(entity);
+    }
+
+    protected Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+}
+
+	This is an abstract class with several data access methods, that uses the SessionFactory for manipulating entities.
+
+	We are using Google Guava's Preconditions here to make sure that a method or a constructor is invoked with a valid parameter value. If Preconditions fails, a tailored exception is thrown.
+
+2.2. The Generic Hibernate DAO
+
+	Now that we have the abstract DAO class, we can extend it just once. The generic DAO implementation will become the only implementation we need:
+
+@Repository
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+public class GenericHibernateDao<T extends Serializable>
+  extends AbstractHibernateDao<T> implements IGenericDao<T>{
+   //
+}
+
+	First, note that the generic implementation is itself parameterized, allowing the client to choose the correct parameter on a case by case basis. This will mean that the clients get all the benefits of type safety without needing to create multiple artifacts for each entity.
+
+	Secondly, notice the prototype scope of this generic DAO implementation. Using this scope means that the Spring container will create a new instance of the DAO each time it's requested (including on autowiring). That will allow a service to use multiple DAOs with different parameters for different entities, as needed.
+
+	The reason this scope is so important is due to the way Spring initializes beans in the container. Leaving the generic DAO without a scope would mean using the default singleton scope, which would lead to a single instance of the DAO living in the container. That would obviously be majorly restrictive for any kind of more complex scenario.
+
+	The IGenericDao is simply an interface for all the DAO methods so that we can inject the implementation we need:
+
+public interface IGenericDao<T extends Serializable> {
+    void setClazz(Class< T > clazzToSet);
+
+    T findOne(final long id);
+
+    List<T> findAll();
+
+    T create(final T entity);
+
+    T update(final T entity);
+
+    void delete(final T entity);
+
+    void deleteById(final long entityId);
+}
+
+2.3. The Abstract JPA DAO
+
+	The AbstractJpaDao is very similar to the AbstractHibernateDao:
+
+public abstract class AbstractJpaDAO<T extends Serializable> {
+    private Class<T> clazz;
+
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager entityManager;
+
+    public final void setClazz(final Class<T> clazzToSet) {
+        this.clazz = clazzToSet;
+    }
+
+    public T findOne(final long id) {
+        return entityManager.find(clazz, id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> findAll() {
+        return entityManager.createQuery("from " + clazz.getName()).getResultList();
+    }
+
+    public T create(final T entity) {
+        entityManager.persist(entity);
+        return entity;
+    }
+
+    public T update(final T entity) {
+        return entityManager.merge(entity);
+    }
+
+    public void delete(final T entity) {
+        entityManager.remove(entity);
+    }
+
+    public void deleteById(final long entityId) {
+        final T entity = findOne(entityId);
+        delete(entity);
+    }
+}
+
+	Similar to the Hibernate DAO implementation, we're using the Java Persistence API directly, without relying on the now deprecated Spring JpaTemplate.
+
+2.4. The Generic JPA DAO
+
+	Similar to the Hibernate implementation, the JPA Data Access Object is straightforward as well:
+
+@Repository
+@Scope( BeanDefinition.SCOPE_PROTOTYPE )
+public class GenericJpaDao< T extends Serializable >
+ extends AbstractJpaDao< T > implements IGenericDao< T >{
+   //
+}
+
+3. Injecting This DAO
+
+	We now have a single DAO interface we can inject. We also need to specify the Class:
+
+@Service
+class FooService implements IFooService{
+
+   IGenericDao<Foo> dao;
+
+   @Autowired
+   public void setDao(IGenericDao<Foo> daoToSet) {
+      dao = daoToSet;
+      dao.setClazz(Foo.class);
+   }
+
+   // ...
+}
+
+	Spring autowires the new DAO instance using setter injection so that the implementation can be customized with the Class object. After this point, the DAO is fully parametrized and ready to be used by the service.
+
+	There are of course other ways that the class can be specified for the DAO – via reflection, or even in XML. My preference is towards this simpler solution because of the improved readability and transparency compared to using reflection.
+
+4. Conclusion
+
+	This article discussed the simplification of the Data Access Layer by providing a single, reusable implementation of a generic DAO. We showed the implementation in both a Hibernate and a JPA based environment. The result is a streamlined persistence layer, with no unnecessary clutter.
+
+	For a step by step introduction about setting up the Spring context using Java based configuration and the basic Maven pom for the project, see this article.
+

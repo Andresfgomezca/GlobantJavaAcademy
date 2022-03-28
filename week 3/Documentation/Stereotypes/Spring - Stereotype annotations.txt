@@ -1,0 +1,5 @@
+https://www.geeksforgeeks.org/spring-stereotype-annotations/
+
+*** 03/dec/2021
+
+Spring – Stereotype Annotations

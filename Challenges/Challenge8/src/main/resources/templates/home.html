@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Meteorological Data!</title>
+    <!--<script type="text/javascript" src="@{/resources/static/js/app.js}"></script>-->
+</head>
+<body>
+
+<div th:insert="~{header :: page-header}"></div>
+<div style="display:flex; ">
+    <div style="width:20%;" align="center">
+        <form method="POST" action="home/add" th:object="${meteorologicalData}">
+            <table>
+                <tr>
+                    <h3>Meteorological Data</h3>
+                </tr>
+                <tr hidden>
+                    <td><label>ID:</label></td>
+                    <td><input th:field="*{id}" th:value="1"></td>
+                </tr>
+                <tr>
+                    <td><label>Date:</label></td>
+                    <td><input type="date" th:field="*{date}" min="2010-01-01" max="2022-06-30"
+                               placeholder="YYYY-MM-DD"/></td>
+                </tr>
+                <tr>
+                    <td><label>Location:</label></td>
+                    <td>
+                        <select th:field="*{location}" class="form-control" required>
+                            <th:block th:each="location: ${locationList}">
+                                <option th:text="${location.city}" th:value="${location.id}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Temperature:</label></td>
+                </tr>
+                <tr>
+                    <td><input type="number" th:field="*{temperature1}" step="0.1" placeholder="(f)" required/></td>
+                    <td><input type="number" th:field="*{temperature2}" step="0.1" placeholder="(f)" required/></td>
+                </tr>
+                <tr>
+                    <td><input type="number" th:field="*{temperature3}" step="0.1" placeholder="(f)" required/></td>
+                    <td><input type="number" th:field="*{temperature4}" step="0.1" placeholder="(f)" required/></td>
+                </tr>
+
+                <tr align="center">
+                    <form method="POST" action="home/add">
+                        <input type="submit" value="New M-Data"/>
+                    </form>
+                </tr>
+
+                <tr align="center">
+                    <form method="POST" action="/home/removeM">
+                        <td><input type="submit" value="Remove"/></td>
+                        <td><select th:field="*{id}" class="form-control">
+                            <th:block th:each="meteorologicalData : ${meteorologicalDataList}">
+                                <option th:text="${meteorologicalData.id}" th:value="${meteorologicalData.id}"></option>
+                            </th:block>
+                        </select>
+                        </td>
+                    </form>
+                </tr>
+                <tr align="center">
+                    <form method="POST" action="home/updateMV">
+                        <input type="submit" value="Update"/>
+                    </form>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div style="width:20%; " align="center">
+        <form method="POST" action="/location/add" th:object="${location}">
+            <table>
+                <tr>
+                    <h3>Location</h3>
+                </tr>
+                <tr hidden>
+                    <td><label>ID:</label></td>
+                    <td><input th:field="*{id}" step="1" th:value="1" hidden></td>
+                </tr>
+                <tr>
+                    <td><label>Latitude:</label></td>
+                    <td><input type="number" th:field="*{lat}" step=".01" placeholder="Max 2 decimals" required></td>
+                </tr>
+                <tr>
+                    <td><label>Longitude:</label></td>
+                    <td><input type="number" th:field="*{lon}" step=".01" placeholder="Max 2 decimals" required/></td>
+                </tr>
+                <tr>
+                    <td><label>City:</label></td>
+                    <td><input th:field="*{city}"/></td>
+                </tr>
+                <tr>
+                    <td><label>State:</label></td>
+                    <td><input th:field="*{state}"/></td>
+                </tr>
+
+                <tr align="center">
+                    <form method="POST" action="/location/add">
+                        <input type="submit" value="Add Location"/>
+                    </form>
+                </tr>
+                <tr align="center">
+                    <form method="POST" action="/location/remove">
+                        <td><input type="submit" value="Remove"/></td>
+                        <td><select th:field="*{id}" class="form-control">
+                            <th:block th:each="location: ${locationList}">
+                                <option th:text="${location.id}" th:value="${location.id}"></option>
+                            </th:block>
+                        </select>
+                        </td>
+                    </form>
+                </tr>
+                <tr align="center">
+                    <form method="POST" action="/home/updateV">
+                        <input type="submit" value="Update"/>
+                    </form>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div style="width:20%; " align="center">
+        <table border="1" cellpadding="5">
+            <tr style="font-size:120%;">
+                <p>Meteorological's Data Table</p>
+            </tr>
+            <tr style="font-size:80%;">
+                <th>ID</th>
+                <th>Date</th>
+                <th>Location ID</th>
+                <th>Temperature 1(F)</th>
+                <th>Temperature 2(F)</th>
+                <th>Temperature 3(F)</th>
+                <th>Temperature 4(F)</th>
+            </tr>
+            <tr th:each="meteorologicalData : ${meteorologicalDataList}">
+                <td th:text="${meteorologicalData.id}"/>
+                <td th:text="${meteorologicalData.date}"/>
+                <td th:text="${meteorologicalData.location.id}"/>
+                <!-- Temperature is missing from this method-->
+                <td th:text="${meteorologicalData.temperature1}"/>
+                <td th:text="${meteorologicalData.temperature2}"/>
+                <td th:text="${meteorologicalData.temperature3}"/>
+                <td th:text="${meteorologicalData.temperature4}"/>
+            </tr>
+        </table>
+    </div>
+    <div style="width:20%; " align="center">
+        <table border="1" cellpadding="5">
+            <tr style="font-size:140%;">
+                <p>Location's Table</p>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>City</th>
+                <th>State</th>
+            </tr>
+            <tr th:each="location : ${locationList}">
+                <td th:text="${location.id}"/>
+                <td th:text="${location.lat}"/>
+                <td th:text="${location.lon}"/>
+                <td th:text="${location.city}"/>
+                <td th:text="${location.state}"/>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div th:insert="~{footer :: copy}"></div>
+
+</body>
+</html>

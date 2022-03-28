@@ -1,0 +1,3 @@
+http://ramonabadypuntonet.org/2017/04/01/que-es-un-mock-y-un-stub/
+
+https://en.wikipedia.org/wiki/Test_stub

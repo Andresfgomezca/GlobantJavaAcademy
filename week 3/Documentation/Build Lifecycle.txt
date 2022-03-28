@@ -1,0 +1,88 @@
+Build Lifecycle Basics
+
+	Maven is based around the central concept of a build lifecycle. what this means is that the process for building and distributing a particular artifact (project) is clearly defined.
+
+	For the person building a project, this means that it is only necessary to learn a small set of commands to build any maven project, and the POM will ensure they get the results they desired.
+
+	There are three built-in build lifecycles: default, cleand and site. The defaults lifecycle hangles your project deployment, the clean lifecycle hangles project cleaning, while the site lifecycle handles the creation of your project's web site.
+
+A build lifecycle is made up of phases
+	
+	Each of these build lifecucles is defined by a different list of build phases, where in a build phase represents a stage in the lifecycle.
+
+	For example, the default lifecycle comprises of the following phases(for a complete list of the lifecycle phases, refer to the lifecycle reference https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference):
+
+	validate - validate the project is correct and all necessary information is available
+	compile - compile the source code of the project
+	test - test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+	package - take the compiled code and package it in its distributable format, such as a JAR.
+	verify - run any checks on results of integration tests to ensure quality criteria are met
+	install - install the package into the local repository, for use as a dependency in other projects locally
+	deploy - done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
+
+	These lifecycle phases(plus the other lifecycle phases not shown here) are executed sequentially to complete the default lifecycle. fiven the lifecycle phases above, this means that when the default lifecycle is used, maven will first validate the project, then will try to compile the sources, run those against the tests, package the binaries (e.g jar), run integration tests against that package, verify the integration tests, install the verified package to the local repository, then deploy the installed package to a remote repository. 
+
+Usual command line calls
+You should select the phase that matches your outcome. if you want your jar, run package. if you want to run the unit tests, run test.
+
+if you are uncertain what you want, the preferred phase to call is: mvn verify
+
+This command executes each default lifecycle phase in order(validate, compile, package, etc.) before executing verify. you only need to call the last build phase to be executed, in this case, verify. in most cases the effect is the same as package. however, in case there are integration-tests, these will be executed as well. And during the varify phase some additional checks can be done, e.g. if your code written according to the predefined checkstyle rules. 
+In a build environment, use the following call to cleanly build and deploy artifacts into the shared repository.
+
+mvn clean deploy
+
+	The same command can be used in a multi-module scenario(i.e. a project with one or more subprojects). maven traverses into every subproject and executes clean, then executes deploy( including all of the prior build phase steps)
+
+
+A build phase is made up of plugin goals
+
+	However, even though a build phase is responsible for specific step in the build lifecycle, the manner in which it carries out those responsibilities may vary. and this is done by declaring the plugin goals bound to those build phases.
+
+	A plugin goal represents a specific task(finer than a build phase) which contributes to the build and managing of a project. it may be bound to zero or more build phases. a goal not bnound to any build phase could be executed outside of the build lifecycle by direct invocation. the order of execution depends on the order in which the goal(s) and the build phase(s) are invoked. for example consider the command below
+	the clean and the package arguments are build phases, while the dependency:copy-dependencies is a goal( of a plugin)
+
+mvn clean dependency:copy-dependencies package
+
+	if this were to be executed, the clean phase will be executed first ( meaning it will run all preceding phases of the clean lifecycle, plus the clean phase itselt), and then the dependency:copy-dependencies goal, before finally executing the package phase( and all its preceding build phases of the default lifecycle)
+
+	moreover, if a goal is bound to one or more build phases, that goal will be called in all those phases.
+
+	furthermore, a build phase can also have zero or more goals bound to it. if a build phase has no goals bound to it, that build phase will not execute. but if it has one or more goals bound to it, it will execute all those goals.
+
+	(Note: in maven 2.0.5 and above, multiple goals bound to a phase are executed in the same order as they are declared in the POM, however multiple instances of the same plygiun are not supported. multiple instances of the same plugin are grouped to execute together and ordered in maven 2.0.11 and above.)
+
+
+Some phases are not usually called from the command line
+
+	The phases named with hyphenated-words(pre-*, post-* or process-*) are not usually directly called from the command line. these phases sequence the build, producing intermediate results that are not usefull outside the build. in the case of invoking integration-test, the environment may be left in a hanging state.
+
+	Code coverage tools such as jacoco and executionc ontainer pluygins such as tomcat, cargo and docker bind goals to the pre-integration-test phase to prepare the integration test container environment. these pluygins also bind goals to the post-integration-test phase to fcollect coverage statistics or decommission and the integration test container.
+
+	Failsafe and code coverage plugins bind goals to integration-test and verify phases. the net result is test and coverage reports are available after the verify phase. if integration-test were to be called form the command line, no reports are generated. worse is that the integration test container environment is left in a hanging state; the tomcat webserver or docker instance is left running, and maven may not even terminate by itself. 
+
+
+Setting up your project to use the build lifecycle
+
+	The build lifecycle is simple enough to use, but when you are constructing a maven build for a project, how do you go about assigning tasks to each of these build phases?
+
+Packaging
+	The first and the most common way is to set packaging for your project via the equally named POM element, <packaging>. some of the valid packaging values are jar, war, ear and pom. if no packaging value has been specified it will default to jar.
+
+	Each packaging contains a list of goals to bind to a particular phase. por example, the jar packaging will bind the following goals to build phases of the default lifecycle. 
+
+Phase			plugin:goal
+
+process-resources	resources:resources
+compile			compiler:compile
+process-test-resources	resources:testResources
+test-compile		compiler:testCompile
+test			surefire:test
+package			jar:jar
+install			install:install
+deploy			deploy:deploy
+
+
+
+
+

@@ -1,0 +1,5 @@
+https://dockertips.com/crear-im%C3%A1gen-sql-server-para-docker-personalizada
+
+https://serverfault.com/questions/796762/creating-a-docker-mysql-container-with-a-prepared-database-scheme
+
+https://hub.docker.com/_/mysql

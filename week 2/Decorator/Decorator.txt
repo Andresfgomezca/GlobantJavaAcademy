@@ -1,0 +1,100 @@
+Intent
+	Attach additional responsibilities to an object dinamically. Decorator provide a flexxxible alternative to subclassing for extending funcctionality
+	Client-Specified embellishment of a core object by recursively wrapping it.
+	Wrapping a gift, putting it in a boxx xand wrapping the box
+
+Problem
+	You want to add behavior or state to individual objects at run-time. Inheritance is not feasible because it is static and applies to an entire class.
+
+Discussion
+	Suppose you are working on a user interface toolkit and you wish to support adding borders and scroll bars to windows. You could define an inheritance hierarchy like...
+
+Class window inherit 
+	-w with vertical scrollbar
+	-w with horizontal scrollbar
+		-w with vertical an horizontal scrollbar
+	-w with border
+			-w with all the features
+	
+	But the decorator pattern suggests giving the client the ability to specify whatever combination of " features" is desired
+
+Widget* aWidget = new BorderDecorator(
+  new HorizontalScrollBarDecorator(
+    new VerticalScrollBarDecorator(
+      new Window( 80, 24 ))));
+aWidget->draw();
+
+The flexibility can be achieved with the following design
+
+Interface -> LCD
+Class Window has the draw() method
+Class Decorator has another draw() method 
+	this class inherit features (border, VerticalSb, HorizontalSB)
+
+This is an exxample of cascading (or chaining) features together to produce a custom object.
+
+
+	The solution to thi class of problems involves encapsulating the original object inside an abstract wrapper interface. Both the decorator objects and the core object inherit from this abtrasc interface. The interface uses recursive composition to allow an unlimited number of decorators "layers" to be added to each core object.
+
+	Note that this pattern allows responsibilities to be added to an object, not methods to an object's interface. The interface presented to the client must remain constant as successive layers are specified.
+
+	Also note that the core object's identity has now been "hidden" inside of a decorator object. trying to acces the core object directly is now a problem
+
+Structure
+	 The client is always interes in CoreFunctionality.doThis()-This is a function . The client may , or may not, be interested in OptionalOne.doThis() and OptionalTwo.doThis(). Each of there classes always delegate to the decorator base class, and that class always delegates to the contained "wrappee" Object.
+
+Interface
+do.This()
+
+CoreFunctionality	Optional Wrapper
+do.This			wrappee
+			do.this()--wrappee.doThis
+			|
+	OptionalOne	OptionalTwo	OptionalThree
+	do.this()	do.this()	do.this()
+					|
+//Optional functionality provided by this class super.doThis(); more optional functionality
+
+Example
+	The decorator attaches additional responsibilities to an object dynamically. The ornaments that are added to pine or fir trees are examples of decorators. Lights, Garland, candy canes, glass ornaments, etc.., can be added to a tree to give it a festive look. The ornaments do not change the tree itself which is recognizable as a christmas tree regardless of particular ornaments used. As an example of additional functionality, the addition of lights allow one to "light up" a christmas tree.
+
+	Another exxample: assault gun is a deadly weapon on it's own. But you can apply certain "decorations" to make it more accurate, silent and devastating.
+
+		Weapon
+		aimAndFire()
+Base weapon			WeaponAccesory
+aimAndFire()			aimAndFire()
+				|
+				|
+				ACCESORIES*
+
+
+Check List
+	1. Ensure the context is: a single core(or non-optional) component, several optional embellishments or wrappers, and an interface that is common at all.
+	2. Create a "Lowest common denominator" interface that makes all classes interchangeable.
+	3. Create a second level base class "decorator" to support the optional wrapper classes
+	4. The core class and decorator class inherit from the LCD interface
+	5. The decorator class declares a composition relationship to the LCD interface, and this data member is initialized in its constructor.
+	6. The decorator class delegates to the LCD object.
+	7. Define a decorator derived class for each optional embellishment
+	8. Decoretor derived classes implement their wrapper functionality and delegate to the decorator base class.
+	9. The client configures the type and ordering of core and decorator objects.
+
+Rules of thumb
+	Adapter provides a different interface to its subject. Proxy provides the same interface. Decorator provides an enhanced interface.
+	Adapter changes an object's interface, decorator enhances an object's responsibilities. decorator is thus more transparent to the client. as a consequence, decorator supports recursive composition, which isn't possible with pure adapters.
+	Composite and decorator have similar structure diagrams, reflecting the fact that both rely on recursive composition to organize an open-ended number of objects.
+	A decorator can be viewed as a degenerate composite with only one component. However a decorator adds additional responsibilities - it isn't intended for object aggregation.
+	Decorator is designed to let you add responsibilities to oibjects without subclassing. Composite's focus is not on embellishment but on representation.There intents are distinct but complementary. Consequently, composite and decorator are often used in concert.
+	Composite could use chain of responsibility to let components access global properties through their parent. It could also use decorator to override these properties on parts of the composition.
+	Decortator and proxy have different purposes but similar structures. Both describe how to provide a level of indirection to another object, and the implementations keep a reference to the object to which they forward requests.
+	Composite could use chain of responsibility to let components access global properties through their parent. It could also use decorator to override these properties on parts of the composition.
+	Decorator and proxxy have different purposes but similar structures. Both describe how to provide a level of indirection to another object, and the implementations keep a reference to the object to which they forward requests. 
+	Decorator lets you change the skin of an object. Strategy lets you change the guts.
+
+
+https://www.youtube.com/watch?v=Hm4KE9QdoJ0&t=13s
+
+Tips
+This is a way to modulate objecto to add new features by extending classes, it is different in inheritance.
+This will extend the methods from the decorator to add new features. 

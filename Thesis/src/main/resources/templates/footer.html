@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="copy" style="background-color: rgb(144, 189, 60); padding: 30px 0 30px 0; text-align: center;"
+     height=50px width="100%">
+    <div align="center">
+        <table>
+            <tr>
+
+                <p style="text-align:center;">Follow us</p>
+            </tr>
+            <tr>
+                <td>
+                    <a href="https://facebook.com" style="text-decoration: none; background-color: none; color: black;"><img
+                            th:src="@{/resources/images/facebook.png}" size="20%"
+                            style="object-fit:cover; width:20px; height:20px;"></img>
+                        Facebook</a>
+                </td>
+
+                <td>
+                    <a href="https://www.instagram.com/"
+                       style="text-decoration: none; background-color: none; color: black;">
+                        <img th:src="@{/resources/images/instagram.jpg}" size="20%"
+                             style="object-fit:cover; width:20px; height:20px;"></img>
+                        Instagram
+                    </a>
+                </td>
+
+                <td>
+                    <a href="https://www.youtube.com/"
+                       style="text-decoration: none; background-color: none; color: black;">
+                        <img th:src="@{/resources/images/youtube.jpg}" size="20%"
+                             style="object-fit:cover; width:20px; height:20px;"></img>
+                        Youtube
+                    </a>
+                </td>
+
+                <td>
+                    <a href="https://twitter.com/" style="text-decoration: none; background-color: none; color: black;">
+                        <img th:src="@{/resources/images/twitter.png}" size="20%"
+                             style="object-fit:cover; width:20px; height:20px;"></img>
+                        Twitter
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <a href="https://www.globant.com/" style="text-decoration: none; background-color: none; color: black;">
+            <p class="referencia">
+                &copy; 2022 Globant, Spring boot - Final project
+            </p>
+        </a>
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

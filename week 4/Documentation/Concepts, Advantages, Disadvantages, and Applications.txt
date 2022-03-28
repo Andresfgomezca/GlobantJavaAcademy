@@ -1,0 +1,103 @@
+Functional Programming: Concepts, Advantages, Disadvantages, and Applications
+
+	Functional programming is a programming paradigm in which it is tried to bind each and everything in pure mathematical functions. it is a declarative type of programming style that focuses on what to solve rather than how to solve(aimed by the imperative style of programming)
+
+	Clojure, common lisp, erlang, haskell, and scala are some of the notable programming languages following the functional programing approach. the programming paradigm is based on lambda calculus, which is briefly explained below:
+
+Lambda calculus
+
+	Instead of statements, it makes use of expressions. Unlike a statement, which is executed to assign variables, the evaluation of an expression produces a value. Lambda calculus forms the basis of almost all of the functional programming languages in use.
+
+	Developed by Alonzo Church, Lambda Calculus is a framework for studying computations with functions. Anything that is computable using lambda calculus is computable. Amazingly, it can be labeled as the most succinct programming language of them all.
+
+	In terms of its computational ability, lambda calculus is similar to the Turing machine that laid the foundation for the imperative style of programming. To put lambda calculus in simple words, it is a theoretical framework that describes functions and their evaluation.
+
+Concepts:
+There are 5 most important concepts.
+
+Pure functions
+Pure functions have two important properties, they:
+
+	-Always produce the same output with the same arguments disregard of other factors. this property is also known as immutability.
+
+	-Are deterministic. pure functions either give some output or modify any argument or global variables i.e. they have no side-effects.
+
+Because pure functions have no side effects or hidden I/O, programs built using functional paradigm are easy to debug. moreover, pure functions make writing concurrent applications easier.
+
+When the code is written using the functional programming style, a capable compiler is able to:
+-Memorize the results, parallelize the instructions, wait for evaluating results
+
+Recursion
+
+	In the functional programming paradigm, there is no for and while loops. instead, functional programming languages rely on recursion for iteration. recursion is implemented using recursive functions, which repetitively call themselves until the base case is reached.
+
+Referential transparency 
+
+	Variables once defined in a functional programming language aren't allowed to change the value that they are holding throughout the execution of the program. This is known as referential transparency. it assures that the same language expression gives the same output.
+
+	Functional programs don't have any assignment statements. for storing additional values in a program developed using functional programming, new variables must be defined. state of a variable in such a program is constant at any moment in time. 
+
+	Referential transparency eliminates even the slighest chances of any undesired effects due to the fact that any variable can be replaced with its actual value during any point in the program execution.
+
+Functions are First-Class and can be Higher-Order
+
+	functions in the functional programming style are treated as variables. hence, they are first-class functions. these first-class functions are allowed to be passed to other functions as parameters or returned from functions or stored in data structures. 
+	
+	A higher-order function is a function that takes other functions as arguments and/or returns functions. First-class functions can be higher-order functions in functional programming languages.
+
+Variables are immutable
+
+	Variables are immutable i.e. it isn't possible to modify a variable once it has been initialized. though we can create a new variable, modifying existing variables is not allowed. 
+
+	The immutable nature of variables in a functional programming language benefits in the form of preserving the state throughout execution of a program.
+
+Advantages:
+
+	-Because pure functions don’t change any states and are entirely dependent on the input, they are simple to understand. The return value given by such functions is the same as the output produced by them. The arguments and return type of pure functions are given out by their function signature.
+
+	-Due to the nature of pure functions to avoid changing variables or any data outside it, implementing concurrency becomes efficacious
+
+	-it supports the concept of lazy evaluation, which means that the value is evaluated and stored only when it is required. 
+
+	-Pure functions take arguments once and produce unchangeable output. Hence, they don't produce any hidden output. they use immutable values, making debugging and testing easier.
+
+	-It's style treats functions as values and passes the same to other functions as parameters. it enhances the comprehension and readability of the code.
+
+Disadvantages
+
+	-Immutable values combined with recursion might lead to a reduction in performance
+
+	-In some cases, writing pure functions causes a reduction in the readability of the code
+
+	-Though writing pure functions is easy, combining the same with the rest of the application as well as the I/O operations is tough
+
+	-Writing programs in recursive style in place of using loops for the same can be a daunting task
+
+Applications 
+
+	Often, functional programming languages are preferred to be used for academic purposes rather than commercial software development.
+
+	Nonetheless, several prominent programming languages following a functional programming paradigm, such as clojure, erlang, f#, haskell and racket, are used widely for developing a variety of commercial and industrial applications.
+
+	WhatsApp makes use of Erlang, a programming language following the functional programming paradigm, to enable its more 100+ employees to manage the data belonging to over 1.5 billion people.
+
+	Another important torchbearer of the functional programming style is Haskell. It is used by Facebook in its anti-spam system. Even JavaScript, one of the most widely used programming languages, flaunts properties of a dynamically typed functional language.
+
+	Moreover, the functional style of programming is essential for various programming languages to lead in distinct domains. For example, R in statistics and J, K, and Q in financial analysis.
+	Some elements of this programming paradigm are even used by domain-specific declarative languages such as Lex/Yacc and SQL for eschewing mutable values.
+
+Generally, this paradigm is widely employed in:
+
+	-Applications aimed at concurrency or parallelism
+	
+	-Carrying out mathematical computations
+
+Summary
+
+	Other than pure functional programming languages, it is possible to establish the functional approach of programming in non-functional programming languages too. There are several books available on the topic.
+
+	C++11, C# 3.0, and Java 8 added constructs for facilitating the functional programming style. One of the most notable examples of an imperative programming language using the functional style of programming is the Scala programming language.
+https://hackr.io/tutorials/learn-scala?ref=blog-post
+
+	Though typically written in a functional style, Scala features the presence of side effects and mutable states. Hence, the programming language can be placed at an in-between state among the imperative and functional programming styles.
+

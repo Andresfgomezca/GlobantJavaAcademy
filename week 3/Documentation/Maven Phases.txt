@@ -1,0 +1,36 @@
+Running Maven Tools
+
+Maven Phases
+
+	Although hardly a comprehensive list, these are the most common default life cycle phases executed.
+
+-Validate: validate the project is correct and all necessary information is available
+-compile: compile the source code of the project
+-test: test the compiled source code using a suitable unit testing framework. these tests should not require the code be packaged or deployed.
+-package: take the compiled code and package it in its distributable format, such as a JAR
+-Integration-test: process and deploy trhe package if necessary into an environment where integration tests can be run
+-verify: run any checks to verify the package is vaalid and meets quality criteria
+-install: install the package into the local repository, for use as a dependency in other projects locally
+-deploy: done in an integration or release environment, copies the final package to the remote repository for sharing with other develoipers and projects.
+
+	There are 2 other maven lifecycles of note beyond the default list above. they are
+-clean: cleans up artifacts created by priour builds
+-site: generates site documentation for this project.
+
+	Phases are actually mapped to underlying goals. the specific goals executed per phase is dependant upon the packaging type of project. for example, package executes jar:jar if the project type is a JAR, and war:war if the project type is a WAR.
+
+An interesting thing to note is that phases and goals may be executed in sequence.
+
+mvn clean dependency:copy-dependencies package
+
+This command will clean the project, copy dependencies, and package the project (executing all phases up to package, of course).
+
+Generating the Site
+mvn site
+This phase generates a site based upon information on the project's pom. You can look at the documentation generated under target/site.
+
+
+Conclusion
+	We hope this quick overview has piqued ytour interest in the versatility of maven. Note that this is avery truncated quick-start guide. now you are ready for more comprehensive details concerning the actions you have just performed. Check out the maven getting started guide. 
+
+https://maven.apache.org/guides/getting-started/index.html

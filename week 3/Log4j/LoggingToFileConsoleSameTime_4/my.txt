@@ -1,0 +1,4 @@
+[main] INFO  Client 26/02/2012 23:33:59 - This is info message
+[main] WARN  Client 26/02/2012 23:33:59 - This is warn message
+[main] FATAL Client 26/02/2012 23:33:59 - This is fatal message
+[main] ERROR Client 26/02/2012 23:33:59 - This is error message

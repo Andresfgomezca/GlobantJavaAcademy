@@ -1,0 +1,178 @@
+Introduction to JPA Architecture
+https://dzone.com/articles/introduction-to-jpa-architecture
+
+	In this article, we will discuss the architecture (core classes and interfaces of Java Persistence API) of the JPA specification. The Java Persistence API (JPA) is the Java standard for mapping Java objects to a relational database. Mapping Java objects to database tables and vice versa is called object-relational mapping (ORM). The Java Persistence API (JPA) is one possible approach to ORM. Via JPA, the developer can map, store, update, and retrieve data from relational databases to Java objects and vice versa. JPA can be used in Java-EE and Java-SE applications. JPA is a specification and several implementations are available. Popular implementations are Hibernate, EclipseLink, and Apache OpenJPA.
+hibernate link: http://www.javaguides.net/p/hibernate-tutorial.html. 
+
+JPA Architecture
+
+	Java Persistence API is a source-to-store business entities as relational entities. It shows how to define a PLAIN OLD JAVA OBJECT (POJO) as an entity and how to manage entities with relations.
+
+Class-Level Architecture
+	
+	The following image shows the class level architecture of JPA. It shows the core classes and interfaces of JPA.
+
+Entity manager factory, entity transaction, entity manage, query, persistence
+
+the api is conected to the database with entities
+
+Let's describe each of the units shown in the above architecture.
+
+	EntityManagerFactory — This is a factory class of EntityManager. It creates and manages multiple EntityManager instances.
+http://www.javaguides.net/2018/12/jpa-entitymanagerfactory-interface-with-example.html
+
+	EntityManager — It is an interface; it manages the persistence operations on objects. It works like a factory for Query instance.
+http://www.javaguides.net/2018/12/jpa-entitymanager-interface-with-example.html
+
+	Entity — Entities are the persistence objects, stored as records in the database.
+
+	EntityTransaction — It has one-to-one relationship with EntityManager. For each EntityManager, operations are maintained by the EntityTransaction class.
+http://www.javaguides.net/2018/12/jpa-entitytransaction-interface-with-example.html
+
+	Persistence — This class contains static methods to obtain the EntityManagerFactory instance.
+
+	Query - This interface is implemented by each JPA vendor to obtain relational objects that meet the criteria.
+
+	The above classes and interfaces are used for storing entities into a database as a record. They help programmers by reducing their efforts to write codes for storing data into a database so that they can concentrate on more important activities such as writing codes for mapping the classes with database tables.
+
+JPA Class Relationships
+
+	In the above architecture, the relations between the classes and interfaces belong to the javax.persistencepackage. The following diagram shows the relationship between them.
+
+entityManagerFactori
+|.
+EntityManager-1 Entity transaction
+|		\. Query
+|.
+Entity
+
+the entitymanagerfactory can instanciate multiple entity managers, this managers can have 1 entity transaction and multiple queries, they can also have multiple entities
+
+-The relationship between EntityManagerFactory and EntityManager is one-to-many. It is a factory class to EntityManager instances.
+
+-The relationship between EntityManager and EntityTransaction is one-to-one. For each EntityManager operation, there is an EntityTransaction instance.
+
+-The relationship between EntityManager and Query is one-to-many. Many numbers of queries can execute using one EntityManager instance.
+
+-The relationship between EntityManager and Entity is one-to-many. One EntityManager instance can manage multiple Entities.
+
+JPA Simple Example
+
+	Let's demonstrates the usage of core classes and interfaces of javax.persistence package.
+
+JPA Entity
+
+	Here, we are using  @Entity,  @Id,  @GeneratedValue, and  @Column annotations for mapping between Java object to database table columns.
+(using hibernate)
+the example has a javaclass student with some attributes and is conected to a database table called student
+
+package net.javaguides.hibernate.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "student")
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email")
+    private String email;
+
+    public Student() {
+
+    }
+
+    public Student(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+    }
+}
+
+
+Usage of EntityManager, EntityManagerFactory, and EntityTransaction
+
+	Note that from above class-level architecture, we are using EntityManager, EntityManagerFactory, and EntityTransaction interfaces in this snippet. In this example, we usepersist() method to store student object into the database.
+
+package net.javaguides.hibernate;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+import net.javaguides.hibernate.entity.Student;
+
+public class App {
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("PERSISTENCE");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        Student student = new Student("Ramesh", "Fadatare", "rameshfadatare@javaguides.com");
+        entityManager.persist(student);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        entityManagerFactory.close();
+    }
+}
+
+
+Read complete example at JPA 2 with Hibernate 5 Bootstrapping Example. In this post, we will show you how to create or configure a simple JPA application with Hibernate.
+http://www.javaguides.net/2018/11/jpa-with-hibernate-5-bootstrapping-example.html
+
+For more, check out this JPA example.
+http://www.javaguides.net/search/label/JPA
+

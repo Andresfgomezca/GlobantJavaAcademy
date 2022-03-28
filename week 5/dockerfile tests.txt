@@ -1,0 +1,36 @@
+FROM mysql:8.0 as builder
+
+# That file does the DB initialization but also runs mysql daemon, by removing the last line it will only init
+RUN ["sed", "-i", "s/exec \"$@\"/echo \"not running $@\"/", "/usr/local/bin/docker-entrypoint.sh"]
+
+# needed for intialization
+ENV MYSQL_ROOT_PASSWORD="admin123"
+
+COPY setup.sql /docker-entrypoint-initdb.d/
+
+# Need to change the datadir to something else that /var/lib/mysql because the parent docker file defines it as a volume.
+# https://docs.docker.com/engine/reference/builder/#volume :
+#       Changing the volume from within the Dockerfile: If any build steps change the data within the volume after
+#       it has been declared, those changes will be discarded.
+RUN ["/usr/local/bin/docker-entrypoint.sh", "mysqld", "--datadir", "/initialized-db"]
+
+FROM mysql:8.0
+
+COPY --from=builder /initialized-db /var/lib/mysql
+
+RUN -it --rm --link my-container mysql:latest mysql -hmy-container -uroot -proot myexample -e "select * from mytable;"
+                                                                                         CREATE TABLE master.USER (PRIMARY KEY('zipCode'), username VARCHAR(100) NOT NULL, name VARCHAR(100) NOT NULL, lastName VARCHAR(100) NOT NULL,
+identificationNumber VARCHAR(100) NOT NULL, address VARCHAR(100) NOT NULL, zipCode VARCHAR(100) NOT NULL,
+city VARCHAR(100) NOT NULL, state VARCHAR(100) NOT NULL);                                                                                                                                                                                                                                                PRIMARY KEY (`idUSER`))
+
+INSERT INTO USER (username, name, lastName, identificationNumber, address, zipCode, city, state) VALUES
+	 (N'andgoca96',N'andres',N'gomez',N'1144090825',N'calle 4#79-20',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 1 ',N'ejemplo 1 ',N'ejemplo 1',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 2 ',N'ejemplo 2',N'ejemplo 2',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 3 ',N'ejemplo 3 ',N'ejemplo 3 ',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 4',N'ejemplo 4',N'ejemplo 4',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 5',N'ejemplo 5',N'ejemplo 5',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 6',N'ejemplo 6',N'ejemplo 6',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 7',N'ejemplo 7',N'ejemplo 7',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 8',N'ejemplo 8',N'ejemplo 8',N'123456789',N'carrera 123',N'760000',N'cali',N'valle del cauca'),
+	 (N'ejemplo 11',N'ejemplo 11',N'ejemplo 11',N'987654321',N'carrera 123',N'760000',N'cali',N'valle del cauca');

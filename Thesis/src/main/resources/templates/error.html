@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:position="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home!</title>
+</head>
+<style>
+body {
+  font-family: Georgia, serif;
+}
+.button {
+  display: inline-block;
+  padding: 10px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: rgb(144, 189, 60);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  display: inline-block;
+  margin: 10px;
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
+
+
+
+
+
+
+</style>
+<body>
+
+<div th:insert="~{header :: page-header}"></div>
+<div align="center">
+    <div>
+        <marquee><a href="http://localhost:8080/login" style="display: inline-block;">
+
+            <button class="button">Logout</button>
+
+        </a>
+            <a href="http://localhost/#/" style="display: inline-block;">
+
+                <button class="button">Maildev</button>
+
+            </a>
+            <a href="http://localhost:8080/swagger-ui/#/" style="display: inline-block;">
+
+                <button class="button">Swagger</button>
+
+            </a></marquee>
+    </div>
+    <table>
+        <!--Documentation -->
+        <tr align="center">
+            <td>
+                <b><p style="font-size:15px;">Documentation</p></b>
+            </td>
+            <td>
+                <p style="font-size:20px;">Website In Construction!</p>
+            </td>
+            <td>
+                <b><p style="font-size:15px;">Topics</p></b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <Ul type="square">
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://hub.docker.com/r/maildev/maildev"> Maildev</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://stackoverflow.com/questions/69607142/how-to-setup-maildev-email-persistant-storage-with-docker">Maildev
+                        - setup </a></li>
+
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://stackoverflow.com/questions/50317404/send-email-with-spring-boot-from-localhost">Spring
+                        boot - Spring
+                        mail configuration</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://juanlopez.com.ar/2020/06/19/como-funciona-spring-jpa-hibernate-ddl-auto/">Spring
+                        boot - Hibernate
+                        ddl configuration </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.baeldung.com/spring-framework-design-patterns">Spring boot - Design
+                        patterns in spring
+                        framework</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://start.spring.io/">Spring boot - spring initializer </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.baeldung.com/spring-security-login">Spring boot - Spring security form
+                        login</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://developer.mozilla.org/es/docs/Web/CSS/position">Css - Elements position</a>
+                    </li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://stackoverflow.com/questions/48139728/http-status-code-for-exceptions">Rest -
+                        HTTPS for exceptions</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.redhat.com/es/topics/api/what-is-a-rest-api">Rest - introduction</a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://swagger.io/">Swagger </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.w3schools.com/">w3school </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.baeldung.com/">Baeldung </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.baeldung.com/java-email-validation-regex#:~:text=The%20simplest%20regular%20expression%20to,otherwise%2C%20the%20result%20is%20false.">Baeldung
+                        - Email Validation </a></li>
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/bcrypt/BCryptPasswordEncoder.html">BcryptPasswordEncoder </a>
+                    </li>
+
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.youtube.com/watch?v=o6292NEYrTY">Data transfer object </a></li>
+
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.youtube.com/c/amigoscode/videos">Amigoscode tutorials </a></li>
+
+
+                    <li><a style="text-decoration: none; background-color: none; color: black;"
+                           href="https://www.youtube.com/c/MitoCode/videos">Mitocode tutorials </a></li>
+
+                </Ul>
+            </td>
+            <td>
+
+            </td>
+            <td>
+                <ul>
+                    <li>
+                        Topic 0: Introduction to Java and OOP
+                    </li>
+                    <li>
+                        Topic 1: Design and Development Principles
+                    </li>
+                    <li>
+                        Topic 2: Spring Framework and Spring Boot
+                    </li>
+                    <li>
+                        Topic 3: Functional Programming
+                    </li>
+                    <li>
+                        Topic 4: Docker
+                    </li>
+                    <li>
+                        Topic 5: Database Interaction and ORMs
+                    </li>
+                    <li>
+                        Topic 6: Unit Testing with JUnit and Mockito
+                    </li>
+                    <li>
+                        Topic 7: Spring MVC
+                    </li>
+                    <li>
+                        Topic 8: REST Application Design with Spring Boot
+                    </li>
+                </ul>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+<div th:insert="~{footer :: copy}"></div>
+
+</body>
+</html>

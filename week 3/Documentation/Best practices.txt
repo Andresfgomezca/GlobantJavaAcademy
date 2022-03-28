@@ -1,0 +1,66 @@
+POM Best practices
+
+	Maven can be used to manage everything from simple, single-project systems to builds that involve hundreds of inter-related submodules. part of the learning process with maven isn't just figuring out that syntax for configuring maven, it is learning the "maven way" the current set of best practices for organizing and building projects using maven. this section attempts to distill some of this knowledge to help you adopt best practices from the start without having to wade through years of discussions on the maven mailing list.
+
+Grouping dependencies
+
+	If you have a set of dependencies which are logically grouped together. you can create a project with a pom packaging that groups dependencies together. for example, let;s assume that your application uses hibernate, a popular object-relational mapping framework. every project which uses hibernate might also have a dependency on the spring framework and a MySQL you could create a special POM that does nothing more than declare a set of common dependencies. you could create a project called persistance-deps(shot for persistence dependencies), and have every project that needs to do persistence depende on this convenience project:
+
+Consolidating dependencies in a single POM Project:
+
+"pom" with hibernate, hibernate annotation, spring hibernate3, mysql connector java
+<properties>
+        <mysqlVersion>(5.1,)</mysqlVersion>
+        <springVersion>(2.0.6,)</springVersion>
+        <hibernateVersion>3.2.5.ga</hibernateVersion>
+        <hibernateAnnotationsVersion>3.3.0.ga</hibernateAnnotationsVersion>
+    </properties>
+
+if you create this project in a directory named persistence-deps, all you need to do is create this pom.xml and run mvn install Since the packaging type is pom, this pom is installed in your local repository. you can now add this project as a dependency and all of its dependencies will be added as transitive dependencies to your project. when you declare a dependency on this persistance-deps project, don't forget to specify the dependency type as pom
+
+Declaring a dependency on a POM.
+
+<project>
+    <description>This is a project requiring JDBC</description>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>org.sonatype.mavenbook</groupId>
+            <artifactId>persistence-deps</artifactId>
+            <version>1.0</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+</project>
+
+If you later decide to switch to a different JDBC driver(for example JTDS) just replace the dependencies in the persistence-deps project to use net.sourceforge.jtds:jtds instead of mysql:mysql-java-connecto and update the version number. all projects depending on persistence-deps will use JTDS if they decide to update to the newer version. Consolidating related dependencies is a good way to cut down on the length of pom.xml files that start having to depend on a large number of dependencies. if you need to share a large number of dependencies between projects, you could also just establish parent-child relationships between projects and refactor all common dependencies to the parent project, but the disadvantage of the parten-child approach is that a project can have only one parent. sometimes it makes more sense to group similar dependencies together and reference a pom dependency. this way, your project can reference as many of these consolidated dependency poms as it needs.
+
+Note
+Maven uses the depth of a dependency in the tree when resolving conflicts using a nearest-wins approach. Using the dependency grouping technique above pushes those dependencies one level down in the tree. Keep this in mind when choosing between grouping in a pom or using dependencyManagement in a parent POM
+
+Multi-module vs inheritance
+	
+	There is a difference between inheriting from a parent project and being managed by a multimodule project. a parent project is one that passes its values to its children. a multimodule project siply manages a group of other subprojects or modules. the multimodule relationship is defined from the topmost level downwards. when setting up a multimodule project, you are simply telling a project that its build include the specified modules. multimodule builds are to be used to group modules together in a single build. the parent-child relationship is defined from the leaf node upwards. the paren-child relationship deals more with the definition of a particular project. when you associate a child with its parent, you are telling maven that a project's POM is derived from another.
+
+To illustrate the decision process that goes into choosing a design that uses inheritance vs multi-module or both approaches consider the following two examples: the maven project used to generate this book and a hypothetical project that contains a number of logically grouped modules.
+
+Simple project
+	First, lests take a look at the maven-book project. the inheritance and multi-module relationships are shown in a figure, "maven-book multi-module vs inheritance"
+
+When we build this Maven book you are reading, we run mvn package in a multi-module project named maven-book. This multi-module project includes two submodules: book-examples and book-chapters. Neither of these projects share the same parent, they are related only in that they are modules in the maven-book project. book-examples builds the ZIP and TGZ archives you downloaded to get this book’s example. When we run the book-examples build from book-examples/ directory with mvn package, it has no knowledge that it is a part of the larger maven-book project. book-examples doesn’t really care about maven-book, all it knows in life is that its parent is the top-most sonatype POM and that it creates an archive of examples. In this case, the maven-book project exists only as a convenience and as an aggregator of modules.
+
+	Each of the three projects: maven-book, book-examples, and book-chapters all list a shared "corporate" parent — sonatype. This is a common practice in organizations which have adopted Maven, instead of having every project extend the Super POM by default, some organizations define a top-level corporate POM that serves as the default parent when a project doesn’t have any good reason to depend on another. In this book example, there is no compelling reason to have book-examples and book-chapters share the same parent POM, they are entirely different projects which have a different set of dependencies, a different build configuration, and use drastically different plugins to create the content you are now reading. The sonatype POM gives the organization a chance to customize the default behavior of Maven and supply some organization-specific information to configure deployment settings and build profiles.
+
+Multi-module enterprice project
+	Let’s take a look at an example that provides a more accurate picture of a real-world project where inheritance and multi-module relationships exist side by side. Figure 3.5, “Enterprise Multi-module vs. Inheritance” shows a collection of projects that resemble a typical set of projects in an enterprise application. There is a top-level POM for the corporation with an artifactId of sonatype. There is a multi-module project named big-system which references sub-modules server-side and client-side.
+
+	What’s going on here? Let’s try to deconstruct this confusing set of arrows. First, let’s take a look at big-system. The big-system might be the project that you would run mvn package on to build and test the entire system. big-system references submodules client-side and server-side. Each of these projects effectively rolls up all of the code that runs on either the server or on the client. Let’s focus on the server-side project. Under the server-side project we have a project called server-lib and a multi-module project named web-apps. Under web-apps we have two Java web applications: client-web and admin-web.
+
+	Let’s start with the parent/child relationships from client-web and admin-web to web-apps. Since both of the web applications are implemented in the same web application framework (let’s say Wicket), both projects would share the same set of core dependencies. The dependencies on the Servlet API, the JSP API, and Wicket would all be captured in the web-apps project. Both client-web and admin-web also need to depend on server-lib, this dependency would be defined as a dependency between web-apps and server-lib. Because client-web and admin-web share so much configuration by inheriting from web-apps, both client-web and admin-web will have very small POMs containing little more than identifiers, a parent declaration, and a final build name.
+
+	Next we focus on the parent/child relationship from web-apps and server-lib to server-side. In this case, let’s just assume that there is a separate working group of developers which work on the server-side code and another group of developers that work on the client-side code. The list of developers would be configured in the server-side POM and inherited by all of the child projects underneath it: web-apps, server-lib, client-web, and admin-web. We could also imagine that the server-side project might have different build and deployment settings which are unique to the development for the server side. The server-side project might define a build profile that only makes sense for all of the server-side projects. This build profile might contain the database host and credentials, or the server-side project’s POM might configure a specific version of the Maven Jetty plugin which should be universal across all projects that inherit the server-side POM.
+
+	In this example, the main reason to use parent/child relationships is shared dependencies and common configuration for a group of projects which are logically related. All of the projects below big-system are related to one another as submodules, but not all submodules are configured to point back to parent project that included it as a submodule. Everything is a submodule for reasons of convenience, to build the entire system just go to the big-system project directory and run mvn package. Look more closely at the figure and you’ll see that there is no parent/child relationship between server-side and big-system. Why is this? POM inheritance is very powerful, but it can be overused. When it makes sense to share dependencies and build configuration, a parent/child relationship should be used. When it doesn’t make sense is when there are distinct differences between two projects. Take, for example, the server-side and client-side projects. It is possible to create a system where client-side and server-side inherited a common POM from big-system, but as soon as a significant divergence between the two child projects develops, you then have to figure out creative ways to factor out common build configuration to big-system without affecting all of the children. Even though client-side and server-side might both depend on Log4J, they also might have distinct plugin configurations.
+
+	There’s a certain point defined more by style and experience where you decide that minimal duplication of configuration is a small price to pay for allowing projects like client-side and server-side to remain completely independent. Designing a huge set of thirty plus projects which all inherit five levels of POM configuration isn’t always the best idea. In such a setup, you might not have to duplicate your Log4J dependency more than once, but you’ll also end up having to wade through five levels of POM just figure out how Maven calculated your effective POM. All of this complexity to avoid duplicating five lines of dependency declaration. In Maven, there is a "Maven Way", but there are also many ways to accomplish the same thing. It all boils down to preference and style. For the most part, you won’t go wrong if all of your submodules turn out to define back-references to the same project as a parent, but your use of Maven may evolve over time.

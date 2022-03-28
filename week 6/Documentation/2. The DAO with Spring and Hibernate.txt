@@ -1,0 +1,100 @@
+The DAO with Spring and Hibernate
+https://www.baeldung.com/persistence-layer-with-spring-and-hibernate
+
+1. Overview
+
+	This article will show how to implement the DAO with Spring and Hibernate. For the core Hibernate configuration, check out the previous Hibernate 5 with Spring article.
+https://www.baeldung.com/hibernate-5-spring
+
+2. No More Spring Templates
+
+	Starting Spring 3.0 and Hibernate 3.0.1, the Spring HibernateTemplate is no longer necessary to manage the Hibernate Session. It's now possible to make use of contextual sessions – sessions managed directly by Hibernate and active throughout the scope of a transaction.
+
+	As a consequence, it's now best practice to use the Hibernate API directly instead of the HibernateTemplate. This will effectively decouple the DAO layer implementation from Spring entirely.
+
+2.1. Exception Translation Without the HibernateTemplate 
+
+	Exception Translation was one of the responsibilities of HibernateTemplate – translating the low-level Hibernate exceptions to higher level, generic Spring exceptions.
+
+	Without the template, this mechanism is still enabled and active for all the DAOs annotated with the @Repository annotation. Under the hood, this uses a Spring bean postprocessor that will advise all @Repository beans with all the PersistenceExceptionTranslator found in the Spring context.
+
+	One thing to remember is that exception translation uses proxies. For Spring to be able to create proxies around the DAO classes, these must not be declared as final.
+
+2.2. Hibernate Session Management Without the Template
+
+	When Hibernate support for contextual sessions came out, the HibernateTemplate essentially became obsolete. In fact, the Javadoc of the class now highlights this aspect (bold from the original):
+
+NOTE: As of Hibernate 3.0.1, transactional Hibernate access code can also be coded in plain Hibernate style. Hence, for newly started projects, consider adopting the standard Hibernate3 style of coding data access objects instead, based on {@link org.hibernate.SessionFactory#getCurrentSession()}.
+
+3. The DAO
+
+	We'll start with the base DAO – an abstract, parametrized DAO which supports the common generic operations and that we can extend for each entity:
+
+public abstract class AbstractHibernateDao<T extends Serializable> {
+    private Class<T> clazz;
+
+    @Autowired
+    protected SessionFactory sessionFactory;
+
+    public final void setClazz(final Class<T> clazzToSet) {
+        clazz = Preconditions.checkNotNull(clazzToSet);
+    }
+
+    // API
+    public T findOne(final long id) {
+        return (T) getCurrentSession().get(clazz, id);
+    }
+
+    public List<T> findAll() {
+        return getCurrentSession().createQuery("from " + clazz.getName()).list();
+    }
+
+    public T create(final T entity) {
+        Preconditions.checkNotNull(entity);
+        getCurrentSession().saveOrUpdate(entity);
+        return entity;
+    }
+
+    public T update(final T entity) {
+        Preconditions.checkNotNull(entity);
+        return (T) getCurrentSession().merge(entity);
+    }
+
+    public void delete(final T entity) {
+        Preconditions.checkNotNull(entity);
+        getCurrentSession().delete(entity);
+    }
+
+    public void deleteById(final long entityId) {
+        final T entity = findOne(entityId);
+        Preconditions.checkState(entity != null);
+        delete(entity);
+    }
+
+    protected Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+}
+
+	A few aspects are interesting here – as discussed, the abstract DAO doesn't extend any Spring template (such as HibernateTemplate). Instead, the Hibernate SessionFactory is injected directly in the DAO, and will have the role of the main Hibernate API, through the contextual Session it exposes:
+
+this.sessionFactory.getCurrentSession();
+
+	Also, note that the constructor receives the Class of the entity as a parameter to be used in the generic operations.
+
+Now, let's look at an example implementation of this DAO, for a Foo entity:
+
+@Repository
+public class FooDAO extends AbstractHibernateDAO< Foo > implements IFooDAO{
+
+   public FooDAO(){
+      setClazz(Foo.class );
+   }
+}
+4. Conclusion
+	
+	This article covered the configuration and implementation of the persistence layer with Hibernate and Spring.
+
+	The reasons to stop relying on templates for the DAO layer was discussed, as well as possible pitfalls of configuring Spring to manage transactions and the Hibernate Session. The final result is a lightweight, clean DAO implementation, with almost no compile-time reliance on Spring.
+
+	The implementation of this simple project can be found in the github project.

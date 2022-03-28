@@ -1,0 +1,19 @@
+encapsulate
+
+constructor
+
+getter 
+
+setter
+
+private - protected
+
+Prototype GoF
+
+Builder GoF
+
+inextricable coupling = impossible to separate
+strategy
+udemy
+codigo facilito
+
